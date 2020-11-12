@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import MovieCard from "./MovieCard";
 
-function Movie({ addToSavedList }) {
+function Movie({ addToSavedList, getMovieList }) {
   const [movie, setMovie] = useState(null);
   const params = useParams();
+  const { push } = useHistory()
 
   const fetchMovie = (id) => {
     axios
@@ -28,13 +29,28 @@ function Movie({ addToSavedList }) {
     return <div>Loading movie information...</div>;
   }
 
-  return (
+  const handleDelete = () => {
+    axios
+    .delete(`http://localhost:5000/api/movies/${params.id}`)
+    .then(res => {
+      console.log(res)
+      getMovieList(res.data)
+      push('/')
+    })
+    .catch(res => {
+      console.log(res)
+    })
+  }
+
+  
+   return (
     <div className="save-wrapper">
       <MovieCard movie={movie} />
 
       <div className="save-button" onClick={saveMovie}>
         Save
       </div>
+      <button onClick={handleDelete}>delete</button>
     </div>
   );
 }

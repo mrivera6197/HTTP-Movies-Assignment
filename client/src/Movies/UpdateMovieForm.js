@@ -46,7 +46,7 @@ const UpdateMovieForm = props => {
         .then(res => {
             console.log(res)
             props.getMovieList()
-            push('/movies')
+            push('/')
         })
         .catch(err => {
             console.log(err)
