@@ -7,6 +7,7 @@ function Movie({ addToSavedList, getMoiveList }) {
   const [movie, setMovie] = useState(null);
   const params = useParams();
   const { push } = useHistory()
+  const { id } = useParams()
 
   const fetchMovie = (id) => {
     axios
@@ -28,7 +29,19 @@ function Movie({ addToSavedList, getMoiveList }) {
   }
 
   const handleDelete = () => {
+    axios
+    .delete(`http://localhost:5000/api/movies/${id}`)
+    .then(res => {
+      getMoiveList()
+    })
+    .then(push('/'))
+    .catch(res => {
+      console.log(res)
+    })
+  }
 
+  const handleEdit = () => {
+    push(`/update-movie/${id}`)
   }
 
   return (
@@ -40,6 +53,9 @@ function Movie({ addToSavedList, getMoiveList }) {
       </div>
       <button onClick={handleDelete}>
         delete
+      </button>
+      <button onClick={handleEdit}>
+        edit
       </button>
     </div>
   );
